@@ -138,4 +138,9 @@ export default {
         message: 'S3 File not found in the system'
     },
 
+    FILE_OPERATION_FAILED: {
+        status: status.BAD_REQUEST,
+        code: 'FILE_OPERATION_FAILED',
+        message: 'File operation failed'
+    },
 }

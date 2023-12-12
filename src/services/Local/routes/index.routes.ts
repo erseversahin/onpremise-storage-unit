@@ -18,7 +18,8 @@ import {
     PUT_EXT_MOVE_FILE,
     PUT_EXT_RENAME_FILE,
     POST_EXT_UPLOAD_FILES_LOCAL,
-    POST_EXT_CREATE_FOLDER
+    POST_EXT_CREATE_FOLDER,
+    POST_COPY_FILE
 } from "@services/Local/controllers/index.controller";
 import config from "@constants/company.data";
 import { authorizeRequest } from '@middlewares/Authorization/index.authorization';
@@ -62,6 +63,11 @@ const LocalRouterFn: RouterFunction = (router) => {
     */
 
     router.put("/local/files/rename/:key", authorizeRequest, PUT_RENAME_FILE);
+
+    /**
+     * COPY FILES
+     */
+    router.post("/local/files/copy/:key", authorizeRequest, POST_COPY_FILE);
 
     /**
      * READ FILES UNDER FOLDERS

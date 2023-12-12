@@ -129,5 +129,10 @@ export default {
         status: status.OK,
         code: 'GDRIVE_DOWNLOAD_FILE',
         message: "File is downloaded successfully on GDrive"
-    }
+    },
+    FILE_COPIED: {
+        status: status.OK,
+        code: 'FILE_COPIED',
+        message: "File is copied successfully on the system"
+    },
 }

@@ -94,6 +94,8 @@ export const GET_READ_FILE: SessionedAsyncControllerType = async (req, res) => {
 export const PUT_MOVE_FILE: SessionedAsyncControllerType = async (req, res) => {
     const { key } = req.params;
     const { newFolderKey } = req.body;
+    console.log('BURADA!!!')
+
     try {
 
         const fileResponse = await req.jetlexaApi.get(`/cdn/files/${key}`);
@@ -228,6 +230,48 @@ export const PUT_RENAME_FILE: SessionedAsyncControllerType = async (req, res) =>
         throw new ApiError(ApiErrorStore.FILE_NOT_FOUND);
     }
 }
+export const POST_COPY_FILE: SessionedAsyncControllerType = async (req, res) => {
+    const { key } = req.params;
+    let { filename } = req.body;
+    try {
+
+        const fileResponse = await req.jetlexaApi.get(`/cdn/files/${key}`);
+        const filePath = path.resolve(fileResponse?.data?.node?.file?.filePath);
+        const extension = path.extname(filePath);
+        if (!filename.endsWith(extension)) {
+            filename = filename + extension;
+        }
+        const newFilePath = path.resolve(filePath.replace(fileResponse?.data?.node?.file?.filename, filename));
+
+        console.log("NEW_FILE_PATH::", newFilePath);
+
+        if (!fs.existsSync(filePath)) {
+            throw new ApiError(ApiErrorStore.FILE_NOT_FOUND);
+        }
+
+        // Dosyayı yeni bir isimle kopyalama
+        fs.copyFileSync(filePath, newFilePath);
+
+        const dirname: string = path.join(__dirname, '../../../../', 'files', config?.COMPANY).toString();
+        console.log('BURADA 1::')
+
+        console.log('BURADA 2::')
+
+        res.status(ApiSuccessStore.FILE_COPIED.status).json({
+            response: ApiSuccessStore.FILE_COPIED,
+            node: {
+                __dirname: dirname,
+                originalFilePath: filePath,
+                newFilePath: newFilePath,
+                filePath: newFilePath,
+                filename: filename
+            }
+        })
+    } catch (error) {
+        throw new ApiError(ApiErrorStore.FILE_OPERATION_FAILED);
+    }
+}
+
 export const PUT_EXT_RENAME_FILE: SessionedAsyncControllerType = async (req, res) => {
     const { key } = req.params;
     let { filename } = req.body;

@@ -124,5 +124,10 @@ declare const _default: {
         code: string;
         message: string;
     };
+    FILE_COPIED: {
+        status: 200;
+        code: string;
+        message: string;
+    };
 };
 export default _default;
